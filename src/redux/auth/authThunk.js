@@ -27,12 +27,13 @@ export const signupUser = createAsyncThunk(
       localStorage.setItem("token", data.token);
       return data;
     } catch (error) {
-      console.log("error:   errrr", error);
-      return rejectWithValue(
+      const errorMessage =
         error.response?.data?.message ||
-          error.response?.data?.errors?.[0]?.msg ||
-          "Signup failed"
-      );
+        error.response?.data?.errors?.[0]?.message ||
+        error.message ||
+        "Signup failed";
+
+      return rejectWithValue(errorMessage);
     }
   }
 );

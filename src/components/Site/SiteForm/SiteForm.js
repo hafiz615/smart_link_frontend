@@ -111,6 +111,11 @@ const SiteForm = ({ site, onClose }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if (generatingDescription) {
+      toast.info("Please wait for description generation to complete.");
+      return;
+    }
+
     setIsSubmitting(true);
 
     const isValid = await validateForm();
@@ -159,19 +164,42 @@ const SiteForm = ({ site, onClose }) => {
 
       if (onClose) onClose();
     } catch (err) {
-      toast.error(
-        err.message || `Failed to ${site ? "update" : "create"} site.`
-      );
+      if (err.name === "ValidationError") {
+        const errors = {};
+        err.inner.forEach((validationError) => {
+          errors[validationError.path] = validationError.message;
+        });
+        setFieldErrors(errors);
+        toast.error("Please fix the form errors.");
+      } else {
+        const errorMessage =
+          typeof err === "string" ? err : err?.message || "Signup failed";
+
+        if (errorMessage.toLowerCase().includes("siteurl")) {
+          setFieldErrors((prev) => ({ ...prev, siteUrl: errorMessage }));
+        }
+
+        toast.error(errorMessage);
+      }
     } finally {
       setIsSubmitting(false);
     }
+  };
+
+  const handleCancel = () => {
+    // Prevent cancel if description is being generated
+    if (generatingDescription) {
+      toast.info("Please wait for description generation to complete.");
+      return;
+    }
+
+    if (onClose) onClose();
   };
 
   return (
     <FormContainer>
       <h2>{site ? "Edit Site" : "Add New Site"}</h2>
       <form onSubmit={handleSubmit} noValidate>
-        {/* Site URL */}
         <FormGroup>
           <Label>Website URL</Label>
           <Input
@@ -186,8 +214,6 @@ const SiteForm = ({ site, onClose }) => {
             <ErrorMessage>{fieldErrors.siteUrl}</ErrorMessage>
           )}
         </FormGroup>
-
-        {/* Title */}
         <FormGroup>
           <Label>Title</Label>
           <Input
@@ -202,8 +228,6 @@ const SiteForm = ({ site, onClose }) => {
             <ErrorMessage>{fieldErrors.title}</ErrorMessage>
           )}
         </FormGroup>
-
-        {/* Cover Image */}
         <FormGroup>
           <Label>Cover Image (optional)</Label>
           <Input
@@ -234,7 +258,6 @@ const SiteForm = ({ site, onClose }) => {
           )}
         </FormGroup>
 
-        {/* Category */}
         <FormGroup>
           <Label>Category</Label>
           <Select
@@ -256,7 +279,6 @@ const SiteForm = ({ site, onClose }) => {
           )}
         </FormGroup>
 
-        {/* Description */}
         <FormGroup>
           <Label>Description</Label>
           <Button
@@ -265,10 +287,7 @@ const SiteForm = ({ site, onClose }) => {
             size="small"
             onClick={handleGenerateDescription}
             disabled={
-              !formData.title ||
-              !formData.category ||
-              generatingDescription ||
-              isSubmitting
+              !formData.title || !formData.category || generatingDescription
             }
             style={{ marginBottom: "0.5rem" }}
           >
@@ -288,13 +307,18 @@ const SiteForm = ({ site, onClose }) => {
           )}
         </FormGroup>
 
-        {/* Buttons */}
         <ButtonRow>
-          <Button type="submit" variant="primary" disabled={isSubmitting}>
+          <Button
+            type="submit"
+            variant="primary"
+            disabled={isSubmitting || generatingDescription}
+          >
             {isSubmitting
               ? site
                 ? "Updating..."
                 : "Creating..."
+              : generatingDescription
+              ? "Generating Description..."
               : site
               ? "Update Site"
               : "Create Site"}
@@ -302,10 +326,10 @@ const SiteForm = ({ site, onClose }) => {
           <Button
             type="button"
             variant="secondary"
-            onClick={onClose}
-            disabled={isSubmitting}
+            onClick={handleCancel}
+            disabled={isSubmitting || generatingDescription}
           >
-            Cancel
+            {generatingDescription ? "Generating..." : "Cancel"}
           </Button>
         </ButtonRow>
       </form>
