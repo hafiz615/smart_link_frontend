@@ -1,36 +1,113 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+Here’s your updated, cleaned-up, and more professional **README.md** for the Smart Link Frontend:
 
-## Getting Started
+---
 
-First, run the development server:
+# Smart Link Frontend (Next.js 14 - App Router)
+
+## 🚀 Features
+
+- **Next.js 14** with App Router (`/app` directory structure)
+- **Redux Toolkit** for state management with async thunks
+- **Custom Hooks** for reusable logic
+- **Styled Components** for modular styling
+- **Client-side rendering** using `'use client'` directive
+- **Responsive Design** for all screen sizes
+
+---
+
+## 📂 App Router Structure
+
+```
+/app
+  layout.js          # Root layout with Redux Provider
+  page.js            # Home page (/)
+  /login
+    page.js          # Login page (/login)
+  /signup
+    page.js          # Signup page (/signup)
+  /admin
+    /dashboard
+      page.js        # Admin dashboard (/admin/dashboard)
+```
+
+---
+
+## 📦 Installation
+
+### 1. Prerequisites
+
+Make sure you have:
+
+- **Node.js**: v18.20.8
+- **npm**: v10.8.2
+
+Check versions:
+
+```bash
+node -v
+# v18.20.8
+npm -v
+# 10.8.2
+```
+
+### 2. Install Dependencies
+
+```bash
+npm install
+```
+
+### 3. Environment Variables
+
+Create a `.env` file in the root directory:
+
+```
+NEXT_PUBLIC_API_URL=<your_api_url>
+```
+
+_(Add other environment variables as needed)_
+
+### 4. Start Development Server
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+---
 
-You can start editing the page by modifying `app/page.js`. The page auto-updates as you edit the file.
+## 🌐 Routes
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+| Route              | Description                   |
+| ------------------ | ----------------------------- |
+| `/`                | Home page with site directory |
+| `/login`           | User authentication           |
+| `/signup`          | User registration             |
+| `/admin/dashboard` | Admin panel (protected route) |
 
-## Learn More
+---
 
-To learn more about Next.js, take a look at the following resources:
+## 🧩 Client Components
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+All pages are client components (`'use client'`) because they:
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+- Use React hooks (`useState`, `useEffect`)
+- Access Redux Toolkit store
+- Handle browser interactions
+- Use browser APIs
+- Implement custom hooks
 
-## Deploy on Vercel
+---
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## 📱 Responsive Design
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- **Mobile-first** approach
+- Flexible layouts using **CSS Grid** & **Flexbox**
+- Touch-friendly components
+- Consistent breakpoints across all views
+
+---
+
+## 🛠 Tech Stack
+
+- **Frontend Framework**: Next.js 14 (App Router)
+- **State Management**: Redux Toolkit
+- **Styling**: Styled Components
