@@ -15,8 +15,6 @@ export default function SignupForm({
 }) {
   return (
     <Form onSubmit={onSubmit} noValidate>
-      {serverError && <ErrorMessage>{serverError}</ErrorMessage>}
-
       <FormGroup>
         <Input
           name="username"

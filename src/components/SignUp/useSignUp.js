@@ -62,12 +62,18 @@ const useSignup = () => {
         setFieldErrors(errors);
         toast.error("Please fix the form errors.");
       } else {
-        const message =
-          err?.data?.message ||
-          err?.message ||
-          "Signup failed. Please try again.";
-        setServerError(message);
-        toast.error(message);
+        const errorMessage =
+          typeof err === "string" ? err : err?.message || "Signup failed";
+
+        if (errorMessage.toLowerCase().includes("email")) {
+          setFieldErrors((prev) => ({ ...prev, email: errorMessage }));
+        } else if (errorMessage.toLowerCase().includes("username")) {
+          setFieldErrors((prev) => ({ ...prev, username: errorMessage }));
+        } else {
+          setServerError(errorMessage);
+        }
+
+        toast.error(errorMessage);
       }
     } finally {
       setIsValidating(false);
